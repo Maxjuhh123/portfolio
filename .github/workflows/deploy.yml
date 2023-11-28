@@ -2,22 +2,34 @@ name: Deploy to GitHub pages
 on: 
   workflow_dispatch:
 jobs:
+  config:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Set GitHub E-mail
+        run: git config --global user.email "${{ github.actor }}@users.noreply.github.com
+      - name: Set GitHub Name
+        run: git config --global user.name "${{ github.actor }}"
   build:
     runs-on: ubuntu-latest
+    needs: ["config"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - run: npm install
-      - run: npm run predeploy
+      - name: Setup Dependencies
+        run: npm install
+      - name: Pre-Deploy
+        run: npm run predeploy
   deploy:
     runs-on: ubuntu-latest
-    needs: ["build"]
+    needs: ["config", "build"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - run: npm install
-      - run: npm run deploy
+      - name: Setup Dependencies
+        run: npm install
+      - name: Deploy to GitHub Pages
+        run: npm run deploy

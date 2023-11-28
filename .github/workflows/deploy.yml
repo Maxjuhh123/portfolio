@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Set GitHub E-mail
-        run: git config --global user.email "${{ github.actor }}@users.noreply.github.com
+        run: git config --global user.email "${{ github.actor }}@users.noreply.github.com"
       - name: Set GitHub Name
         run: git config --global user.name "${{ github.actor }}"
   build:
